@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const noteSchema = new Schema({
+const userSchema = new Schema({
     id: { type: String, required: true, trim: true },
     name: { type: String, required: true },
     country: { type: String, required: true },
@@ -10,4 +10,4 @@ const noteSchema = new Schema({
     timestamps: true,
     collection: 'users'
 });
-module.exports = model('User', noteSchema);
+module.exports = model('User', userSchema);

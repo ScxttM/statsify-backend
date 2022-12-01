@@ -18,11 +18,18 @@ app.get('/login', require("./authorizeSpotify"));
 app.get('/login/callback', require("./getAccessToken"), (req, res, next) => {
     if (req.credentials) {
         credentials = req.credentials;
-        res.redirect(`${clientUrl}/?authorized=true&access_token=${req.credentials.access_token}&refresh_token=${req.credentials.refresh_token}`);
+        // res.redirect(`${clientUrl}/?authorized=true&access_token=${req.credentials.access_token}&refresh_token=${req.credentials.refresh_token}`);
+        res.json(credentials);
     } else {
-        res.redirect(`${clientUrl}/failed`);
+        res.redirect(`${clientUrl}/login/callback?failed`);
     }
 });
-// app.get('/history', require("./routes/history"));
+app.get('/refresh_token', (req, res, next) => {
+    refreshAccessToken(credentials.refresh_token).then(data => {
+        credentials = data;
+        res.json(credentials);
+    });
+});
+app.use('/api/history', require("./routes/history"));
 
 module.exports = app;

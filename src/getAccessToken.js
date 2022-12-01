@@ -2,6 +2,7 @@ const fetch = require('node-fetch');
 const spotify = require('./credentials');
 
 const getAccessToken = (req, res, next) => {
+
   const { code } = req.query;
 
   if (code) {
