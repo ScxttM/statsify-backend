@@ -18,8 +18,8 @@ app.get('/login', require("./authorizeSpotify"));
 app.get('/login/callback', require("./getAccessToken"), (req, res, next) => {
     if (req.credentials) {
         credentials = req.credentials;
-        res.redirect(`${clientUrl}/?authorized=true&access_token=${req.credentials.access_token}&refresh_token=${req.credentials.refresh_token}`);
-        // res.json(credentials);
+        // res.redirect(`${clientUrl}/?authorized=true&access_token=${req.credentials.access_token}&refresh_token=${req.credentials.refresh_token}`);
+        res.json(credentials);
     } else {
         res.redirect(`${clientUrl}/login/callback?failed`);
     }
