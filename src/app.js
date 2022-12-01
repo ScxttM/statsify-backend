@@ -26,10 +26,15 @@ app.get('/login/callback', require("./getAccessToken"), (req, res, next) => {
 });
 app.get('/refresh_token', (req, res, next) => {
     refreshAccessToken(credentials.refresh_token).then(data => {
-        credentials = data;
-        res.json(credentials);
+        if (data.access_token) {
+            credentials.access_token = data.access_token;
+            res.json(credentials);
+        } else {
+            res.json({ error: "Could not refresh access token" });
+        }
     });
 });
 app.use('/api/history', require("./routes/history"));
+app.use('/api/tracks', require("./routes/tracks"));
 
 module.exports = app;

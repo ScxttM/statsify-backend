@@ -1,17 +1,23 @@
 const usersCtrl = {};
 const User = require('../models/User');
-usersCtrl.getUsers = async (req, res) => {
-    const users = await User.find();
-    res.json(users);
+usersCtrl.getUser = async (req, res) => {
+    const user = await User.findById(req.params.id);
+    res.json(user);
 }
 usersCtrl.createUser = async (req, res) => {
-    const { username, password } = req.body;
-    const newUser = new User({
-        username: username,
-        password: password
-    });
-    await newUser.save();
-    res.json({ message: 'User created' });
+    const { id, display_name, country, email, images, user_url } = req.body;
+    await User.findOneAndUpdate(
+        { id_user: id },
+        {
+            display_name: display_name,
+            country: country,
+            email: email,
+            images: images,
+            user_url: user_url
+        },
+        { new: true, upsert: true, setDefaultsOnInsert: true },
+    ).catch(err => res.json({ error: err }));
+    res.json({ message: 'User logged' });
 }
 usersCtrl.deleteUser = async (req, res) => {
     await User.findByIdAndDelete(req.params.id);

@@ -1,10 +1,18 @@
 const historyCtrl = {};
 const History = require('../models/History');
 
-historyCtrl.getRecentlyPlayed = (req, res) => {
+historyCtrl.getRecentlyPlayed = async (req, res) => {
+    const tracks = await History.find().limit(req.query.limit);
     res.json(tracks);
 };
-historyCtrl.createRecentlyPlayed = (req, res) => res.json({ message: 'createRecentlyPlayed' });
-historyCtrl.updateRecentlyPlayed = (req, res) => res.json({ message: 'updateRecentlyPlayed' });
+historyCtrl.updateRecentlyPlayed = async (req, res) => {
+    const { id_user, tracks } = req.body;
+    await History.findOneAndUpdate(
+        { id_user: id_user },
+        { tracks },
+        { new: true, upsert: true, setDefaultsOnInsert: true },
+    ).clone().catch(err => res.json({ error: err }));
+    res.json({ message: 'History updated' });
+};
 
 module.exports = historyCtrl;
