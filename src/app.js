@@ -28,7 +28,7 @@ app.get('/refresh_token', (req, res, next) => {
     refreshAccessToken(credentials.refresh_token).then(data => {
         if (data.access_token) {
             credentials.access_token = data.access_token;
-            res.json(credentials);
+            res.json(data.access_token);
         } else {
             res.json({ error: "Could not refresh access token" });
         }
